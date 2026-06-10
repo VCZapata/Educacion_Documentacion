@@ -147,7 +147,7 @@ function clearForm() {
     if (el.tagName === 'SELECT') el.selectedIndex = 0;
     else if (id === 'ibanPais') el.value = 'ES';
     else if (['dias','kmDia','precioKm','horas','jornadas','precioBillete','numBilletes','precioMenu','numMenus'].includes(id)) {
-      el.value = id === 'precioKm' ? '0.26' : '0';
+      el.value = id === 'precioKm' ? '0.12' : '0';
     } else {
       el.value = '';
     }
