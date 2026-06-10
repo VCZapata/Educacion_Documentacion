@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hoja de gastos alumnado FCT/PFE</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Hoja de gastos alumnado FCT / PFE</h1>
+      <p>Rellena el formulario y descarga la hoja en PDF lista para firmar.</p>
+    </div>
+    <div class="actions">
+      <button id="btnPdf" class="btn primary">Descargar PDF</button>
+      <button id="btnPrint" class="btn">Imprimir</button>
+      <button id="btnClear" class="btn ghost">Limpiar</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Datos</h2>
+      <div class="grid">
+        <label>
+          <span>Alumno /a</span>
+          <input type="text" id="alumno" placeholder="Nombre y apellidos" />
+        </label>
+
+        <label>
+          <span>Ciclo formativo</span>
+          <select id="ciclo">
+            <option value="">Selecciona...</option>
+            <option>DAW</option>
+            <option>DAM</option>
+            <option>ASIR</option>
+            <option>SMR</option>
+            <option>Administración y Finanzas</option>
+            <option>Gestión Administrativa</option>
+            <option>Educación Infantil</option>
+            <option>Integración Social</option>
+            <option>Otro</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Empresa</span>
+          <input type="text" id="empresa" placeholder="Empresa" />
+        </label>
+
+        <label class="full">
+          <span>Desplazamiento con derecho a compensación</span>
+          <textarea id="desplazamiento" rows="2" placeholder="Ej.: Alcázar de San Juan - Tomelloso"></textarea>
+        </label>
+
+        <label>
+          <span>Días de desplazamiento</span>
+          <input type="number" id="dias" min="0" step="1" value="0" />
+        </label>
+
+        <label>
+          <span>Km ida y vuelta por día</span>
+          <input type="number" id="kmDia" min="0" step="0.01" value="0" />
+        </label>
+
+        <label>
+          <span>Precio €/Km</span>
+          <input type="number" id="precioKm" min="0" step="0.001" value="0.12" />
+        </label>
+
+        <label class="full">
+          <span>Fechas de los desplazamientos</span>
+          <textarea id="fechas" rows="2" placeholder="Ej.: del 3/02/2026 al 28/03/2026"></textarea>
+        </label>
+
+        <label>
+          <span>Total horas de formación</span>
+          <input type="number" id="horas" min="0" step="1" value="0" />
+        </label>
+
+        <label>
+          <span>Total jornadas</span>
+          <input type="number" id="jornadas" min="0" step="1" value="0" />
+        </label>
+
+        <label>
+          <span>Precio billete (€)</span>
+          <input type="number" id="precioBillete" min="0" step="0.01" value="0" />
+        </label>
+
+        <label>
+          <span>Nº de billetes</span>
+          <input type="number" id="numBilletes" min="0" step="1" value="0" />
+        </label>
+
+        <label>
+          <span>Precio menú (€)</span>
+          <input type="number" id="precioMenu" min="0" step="0.01" value="0" />
+        </label>
+
+        <label>
+          <span>Nº de menús</span>
+          <input type="number" id="numMenus" min="0" step="1" value="0" />
+        </label>
+
+        <label>
+          <span>IBAN país</span>
+          <input type="text" id="ibanPais" maxlength="2" value="ES" />
+        </label>
+
+        <label>
+          <span>2 dígitos control IBAN</span>
+          <input type="text" id="ibanCtrlPais" maxlength="2" placeholder="00" />
+        </label>
+
+        <label>
+          <span>Entidad</span>
+          <input type="text" id="ibanEntidad" maxlength="4" placeholder="0000" />
+        </label>
+
+        <label>
+          <span>Oficina</span>
+          <input type="text" id="ibanOficina" maxlength="4" placeholder="0000" />
+        </label>
+
+        <label>
+          <span>Dígitos control</span>
+          <input type="text" id="ibanDc" maxlength="2" placeholder="00" />
+        </label>
+
+        <label class="full">
+          <span>Número de cuenta</span>
+          <input type="text" id="ibanCuenta" maxlength="10" placeholder="0000000000" />
+        </label>
+
+        <label>
+          <span>Día</span>
+          <input type="number" id="fechaDia" min="1" max="31" step="1" />
+        </label>
+
+        <label>
+          <span>Mes</span>
+          <input type="text" id="fechaMes" placeholder="marzo" />
+        </label>
+
+        <label>
+          <span>Año</span>
+          <input type="number" id="fechaAnio" min="2000" max="2099" step="1" />
+        </label>
+      </div>
+      <p class="help">El total del vehículo particular se calcula automáticamente: <strong>días × km ida/vuelta por día × €/km</strong>.</p>
+    </section>
+
+    <section class="preview-wrap">
+      <div id="documento" class="page">
+        <img src="assets/plantilla.png" alt="Plantilla hoja de gastos" class="bg" />
+
+        <div class="field" style="left:20%; top:21.7%; width:49%;" data-out="alumno"></div>
+        <div class="field" style="left:27.4%; top:24.05%; width:17.8%;" data-out="ciclo"></div>
+        <div class="field" style="left:52%; top:24.05%; width:33%;" data-out="empresa"></div>
+        <div class="field multiline" style="left:9.2%; top:28.3%; width:76%; height:5.6%;" data-out="desplazamiento"></div>
+
+        <div class="field" style="left:35%; top:30.6%; width:11%; text-align:center;" data-out="kmDia"></div>
+        <div class="field" style="left:60.1%; top:30.6%; width:13%; text-align:center;" data-out="kmTotal"></div>
+        <div class="field multiline" style="left:9.2%; top:35.1%; width:40.2%; height:5%;" data-out="fechas"></div>
+
+        <div class="field" style="left:52.4%; top:39.63%; width:6.6%; text-align:center;" data-out="horas"></div>
+        <div class="field" style="left:81.2%; top:39.63%; width:9%; text-align:center;" data-out="jornadas"></div>
+
+        <div class="field" style="left:22.5%; top:44.75%; width:8%; text-align:center;" data-out="precioBillete"></div>
+        <div class="field" style="left:47.2%; top:44.75%; width:8%; text-align:center;" data-out="numBilletes"></div>
+        <div class="field" style="left:60%; top:44.75%; width:10%; text-align:center;" data-out="totalBilletes"></div>
+
+        <div class="field" style="left:17.5%; top:49.65%; width:11.8%; text-align:center;" data-out="kmTotal"></div>
+        <div class="field" style="left:31.5%; top:49.65%; width:10.5%; text-align:center;" data-out="precioKm"></div>
+        <div class="field" style="left:52.2%; top:49.65%; width:12%; text-align:center;" data-out="totalVehiculo"></div>
+
+        <div class="field" style="left:23%; top:54.55%; width:7.2%; text-align:center;" data-out="precioMenu"></div>
+        <div class="field" style="left:43.4%; top:54.55%; width:8.5%; text-align:center;" data-out="numMenus"></div>
+        <div class="field" style="left:56.3%; top:54.55%; width:9.8%; text-align:center;" data-out="totalMenus"></div>
+
+        <div class="field total-box" style="left:74.1%; top:59.8%; width:9.6%;" data-out="totalGeneral"></div>
+
+        <div class="field iban-box" style="left:6.2%; top:69.55%; width:2.2%; text-align:center;"></div>
+        <div class="field iban-box" style="left:8.4%; top:69.55%; width:2.2%; text-align:center;"></div>
+        <div class="field iban-box" style="left:12.7%; top:68.4%; width:2.2%; text-align:center;" data-out="ibanCtrlPais1"></div>
+        <div class="field iban-box" style="left:15.65%; top:68.4%; width:2.2%; text-align:center;" data-out="ibanCtrlPais2"></div>
+        <div class="field iban-box" style="left:19.65%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanEntidad1"></div>
+        <div class="field iban-box" style="left:22.50%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanEntidad2"></div>
+        <div class="field iban-box" style="left:25.15%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanEntidad3"></div>
+        <div class="field iban-box" style="left:28.1%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanEntidad4"></div>
+        <div class="field iban-box" style="left:33.75%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanOficina1"></div>
+        <div class="field iban-box" style="left:36.90%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanOficina2"></div>
+        <div class="field iban-box" style="left:39.45%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanOficina3"></div>
+        <div class="field iban-box" style="left:42.60%; top:67.3%; width:2.35%; text-align:center;" data-out="ibanOficina4"></div>
+        <div class="field iban-box" style="left:47.75%; top:67.3%; width:3.05%; text-align:center;" data-out="ibanDc1"></div>
+        <div class="field iban-box" style="left:50.50%; top:67.3%; width:3.05%; text-align:center;" data-out="ibanDc2"></div>
+        <div class="field iban-box" style="left:56.55%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta1"></div>
+        <div class="field iban-box" style="left:59.23%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta2"></div>
+        <div class="field iban-box" style="left:62.1%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta3"></div>
+        <div class="field iban-box" style="left:65%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta4"></div>
+        <div class="field iban-box" style="left:67.8%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta5"></div>
+        <div class="field iban-box" style="left:70.8%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta6"></div>
+        <div class="field iban-box" style="left:73.4%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta7"></div>
+        <div class="field iban-box" style="left:76.15%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta8"></div>
+        <div class="field iban-box" style="left:79.3%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta9"></div>
+        <div class="field iban-box" style="left:82.1%; top:67.3%; width:2.98%; text-align:center;" data-out="ibanCuenta10"></div>
+
+        <div class="field" style="left:47.55%; top:75.8%; width:4.8%; text-align:center;" data-out="fechaDia"></div>
+        <div class="field" style="left:55.8%; top:75.8%; width:13%; text-align:center;" data-out="fechaMes"></div>
+        <div class="field" style="left:71.35%; top:75.8%; width:7.8%; text-align:center;" data-out="fechaAnioCorto"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
