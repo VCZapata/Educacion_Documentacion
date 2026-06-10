@@ -1,4 +1,4 @@
-# Hoja de gastos FCT / PFE
+# Hoja de gastos del alumnado FCT / PFE
 
 
 ## Contenido
@@ -7,12 +7,6 @@
 - `app.js`
 - `assets/plantilla.png`
 
-## Publicación en GitHub Pages
-1. Sube todos los archivos a la raíz del repositorio.
-2. Ve a **Settings > Pages**.
-3. En **Build and deployment**, selecciona **Deploy from a branch**.
-4. Elige la rama y la carpeta raíz `/root`.
-5. Guarda los cambios.
 
 ## Funciones
 - Formulario lateral para rellenar la hoja.
